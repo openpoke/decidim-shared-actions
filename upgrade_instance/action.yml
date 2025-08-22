@@ -1,0 +1,38 @@
+name: "Upgrade instance dependencies"
+description: "Update the gem dependencies of a Decidim app"
+author: "PokeCode"
+
+inputs:
+  ruby-version:
+    description: "Ruby version to use"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ inputs.ruby-version }}
+        bundler-cache: true
+
+    - name: Install dependecies
+      run: bundle install
+
+    - name: Update bundle dependencies
+      run: |
+        bundle update --patch --conservative
+
+    - name: Commit and create PR
+      uses: peter-evans/create-pull-request@v7
+      with:
+        commmit-message: "chore(deps): Update bundle dependencies"
+        branch: "update-dependencies"
+        title: "Update gem dependencies"
+        body: |
+          This PR updates gem dependencies using:
+          ```
+          bundle update --minor --conservative
+          ```
