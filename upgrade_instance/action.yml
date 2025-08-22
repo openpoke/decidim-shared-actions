@@ -31,6 +31,15 @@ runs:
         bin/rails decidim:upgrade
       shell: bash
 
+    - name: Setup & create Database
+      run: |
+        bundle exec rails db:create db:schema:load
+      bash: shell
+      env:
+        RAILS_ENV: development
+        DATABASE_USERNAME: postgres
+        DATABASE_PASSWORD: postgres
+
     - name: "Execute migrate"
       run: |
         bin/rails db:migrate
