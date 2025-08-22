@@ -16,7 +16,6 @@ runs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ inputs.ruby-version }}
-        bundler-cache: true
 
     - name: Install dependecies
       run: bundle install
