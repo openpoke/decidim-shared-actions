@@ -26,6 +26,16 @@ runs:
         bundle update --patch --conservative
       shell: bash
 
+    - name: "Execute decidim upgrade"
+      run: |
+        bin/rails decidim:upgrade
+      shell: bash
+
+    - name: "Execute migrate"
+      run: |
+        bin/rails db:migrate
+      shell: bash
+
     - name: Commit and create PR
       uses: peter-evans/create-pull-request@v7
       with:
