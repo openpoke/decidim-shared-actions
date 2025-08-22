@@ -34,7 +34,7 @@ runs:
     - name: Setup & create Database
       run: |
         bundle exec rails db:create db:schema:load
-      bash: shell
+      shell: bash
       env:
         RAILS_ENV: development
         DATABASE_USERNAME: postgres
