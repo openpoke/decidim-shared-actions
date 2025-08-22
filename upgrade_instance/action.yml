@@ -30,7 +30,7 @@ runs:
     - name: Commit and create PR
       uses: peter-evans/create-pull-request@v7
       with:
-        commmit-message: "chore(deps): Update bundle dependencies"
+        commit-message: "chore(deps): Update bundle dependencies"
         branch: "update-dependencies"
         title: "Update gem dependencies"
         body: |
