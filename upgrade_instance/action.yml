@@ -20,10 +20,12 @@ runs:
 
     - name: Install dependecies
       run: bundle install
+      shell: bash
 
     - name: Update bundle dependencies
       run: |
         bundle update --patch --conservative
+      shell: bash
 
     - name: Commit and create PR
       uses: peter-evans/create-pull-request@v7
