@@ -1,0 +1,33 @@
+name: "Run brakeman"
+description: "Run brakeman in the application code and generate a report file. This action won't fail and block your CI."
+author: "PokeCode"
+
+inputs:
+  ruby-version:
+    description: "Ruby version to use"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ inputs.ruby-version }}
+        bundler-cache: true
+
+    - name: Install dependencies
+      run: bundle install
+      shell: bash
+
+    - name: Run Brakeman scan
+      run: bundle exec brakeman -f json -o brakeman-report.json || true
+      shell: bash
+
+    - name: Upload Brakeman report
+      uses: actions/upload-artifact@v4
+      with:
+        name: brakeman-report
+        path: brakeman-report.json
