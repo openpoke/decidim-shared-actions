@@ -6,6 +6,10 @@ inputs:
   registry:
     description: Registry where to push the image
     default: ghcr.io
+secrets:
+  GITHUB_TOKEN:
+    description: Token to authenticate in the container registry
+    required: true
 
 runs:
   using: "composite"
