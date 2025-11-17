@@ -1,0 +1,41 @@
+name: Create and publish a Docker image
+description: "Run the build process of the docker image and push it to the ghcr.io registry"
+author: "PokeCode"
+
+inputs:
+  registry:
+    description: Registry where to push the image
+    default: ghcr.io
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v5
+    - name: Log in to the Container registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ inputs.registry }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ inputs.registry }}/${{ github.repository }}
+    - name: Build and push Docker image
+      id: push
+      uses: docker/build-push-action@v6
+      env:
+        - REDIS_URL: redis://127.0.0.1:6379
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+    - name: Generate artifact attestation
+      uses: actions/attest-build-provenance@v3
+      with:
+        subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
+        subject-digest: ${{ steps.push.outputs.digest }}
+        push-to-registry: true
