@@ -26,8 +26,6 @@ runs:
     - name: Build and push Docker image
       id: push
       uses: docker/build-push-action@v6
-      env:
-        - REDIS_URL: redis://127.0.0.1:6379
       with:
         context: .
         push: true
